@@ -4,7 +4,7 @@ endif
 let b:did_indent = 1
 
 setlocal indentexpr=GetPlantUMLIndent()
-setlocal indentkeys=o,O,<:>,!^F,{,0},e
+setlocal indentkeys=o,O,<CR>,<:>,!^F,0end,0else,}
 
 " only define the indent code once
 if exists('*GetPlantUMLIndent')
@@ -34,17 +34,19 @@ function! GetPlantUMLIndent(...) abort
   let pline = getline(pnum)
   let cline = getline(clnum)
 
-  if cline =~# s:decIndent
-    if pline =~# s:incIndent
+  if cline =~ s:decIndent
+    if pline =~ s:incIndent
       return pindent
     else
       return pindent - shiftwidth()
     endif
-  elseif pline =~# s:incIndent
+
+  elseif pline =~ s:incIndent
     return pindent + shiftwidth()
   endif
 
   return pindent
+
 endfunction
 
 function! s:insidePlantUMLTags(lnum) abort

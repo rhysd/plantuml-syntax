@@ -1,5 +1,8 @@
 # Vim PlantUML Syntax/Plugin/FTDetect
 
+This is [a fork repository by @rhysd](https://github.com/rhysd/plantuml-syntax)
+([original repository](https://github.com/aklt/plantuml-syntax)).
+
 This is a vim syntax file for [PlantUML](http://plantuml.com).
 
 The `filetype` will be set to `plantuml` for *.pu, *.uml or *.plantuml files or if the

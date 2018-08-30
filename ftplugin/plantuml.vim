@@ -1,7 +1,3 @@
-if exists('b:loaded_plantuml_plugin')
-  finish
-endif
-let b:loaded_plantuml_plugin = 1
 let s:cpo_save = &cpo
 set cpo&vim
 

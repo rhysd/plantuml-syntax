@@ -5,8 +5,6 @@ if exists('b:current_syntax')
   finish
 endif
 
-scriptencoding utf-8
-
 if v:version < 600
   syntax clear
 endif
@@ -19,7 +17,7 @@ let b:current_syntax = 'plantuml'
 syntax sync minlines=100
 
 syntax match plantumlPreProc /\%(^@startuml\|^@enduml\)\|!\%(define|definelong|else|enddefinelong|endif|if|ifdef|ifndef|include|pragma|undef\)\s*.*/ contains=plantumlDir
-syntax region plantumlDir start=/\s\+/ms=s+1 end=/$/ contained
+syntax region plantumlDir start=/\s\+/ms=s+1 end=/$/ contained containedin=plantumlPreProc
 
 syntax keyword plantumlTypeKeyword abstract actor agent archimate artifact boundary card cloud component control
 syntax keyword plantumlTypeKeyword database entity enum file folder frame node object package participant
@@ -35,7 +33,7 @@ syntax keyword plantumlKeyword rotate show skin skinparam split start stop title
 " Not in 'java - jar plantuml.jar - language' output
 syntax keyword plantumlKeyword then detach sprite
 
-syntax keyword plantumlCommentTODO XXX TODO FIXME NOTE contained
+syntax keyword plantumlCommentTODO XXX TODO FIXME NOTE contained containedin=plantumlComment,plantumlMultilineComment
 syntax match plantumlColor /#[0-9A-Fa-f]\{6\}\>/
 syntax keyword plantumlColor APPLICATION AliceBlue AntiqueWhite Aqua Aquamarine Azure BUSINESS Beige Bisque
 syntax keyword plantumlColor Black BlanchedAlmond Blue BlueViolet Brown BurlyWood CadetBlue Chartreuse
@@ -63,12 +61,12 @@ syntax keyword plantumlColor Yellow YellowGreen
 syntax match plantumlHorizontalArrow /\%([-\.]\%(|>\|>\|\*\|o\>\|\\\\\|\\\|\/\/\|\/\|\.\|-\)\|\%(<|\|<\|\*\|\<o\|\\\\\|\\\|\/\/\|\/\)[\.-]\)\%(\[[^\]]*\]\)\?/ contains=plantumlLabel
 syntax match plantumlDirectedOrVerticalArrowLR /[-\.]\%(le\?f\?t\?\|ri\?g\?h\?t\?\|up\?\|do\?w\?n\?\)\?[-\.]\%(|>\|>>\|>\|\*\|o\>\|\\\\\|\\\|\/\/\|\/\|\.\|-\)\%(\[[^\]]*\]\)\?/ contains=plantumlLabel
 syntax match plantumlDirectedOrVerticalArrowRL /\%(<|\|<<\|<\|\*\|\<o\|\\\\\|\\\|\/\/\|\/\)[-\.]\%(le\?f\?t\?\|ri\?g\?h\?t\?\|up\?\|do\?w\?n\?\)\?[-\.]\%(\[[^\]]*\]\)\?/ contains=plantumlLabel
-syntax region plantumlLabel start=/\[/ms=s+1 end=/\]/me=s-1 contained contains=plantumlText
-syntax match plantumlText /\%([0-9A-Za-z\0xc0-\0xff]\|\s\|[\.,;_-]\)\+/ contained
+syntax region plantumlLabel start=/\[/ms=s+1 end=/\]/me=s-1 contained containedin=plantumlHorizontalArrow,plantumlDirectedOrVerticalArrowLR,plantumlDirectedOrVerticalArrowRL contains=plantumlText
+syntax match plantumlText /\%([0-9A-Za-z\0xc0-\0xff]\|\s\|[\.,;_-]\)\+/ contained containedin=plantumlLabel
 
 " Note
 syntax region plantumlNoteMultiLine start=/\%(^\s*[rh]\?note\)\@<=\s\%([^:"]\+$\)\@=/ end=/^\%(\s*end \?[rh]\?note$\)\@=/ contains=plantumlSpecialString,plantumlNoteMultiLineStart
-syntax match plantumlNoteMultiLineStart /\%(^\s*[rh]\?note\)\@<=\s\%([^:]\+$\)/ contained contains=plantumlKeyword,plantumlColor,plantumlString
+syntax match plantumlNoteMultiLineStart /\%(^\s*[rh]\?note\)\@<=\s\%([^:]\+$\)/ contained containedin=plantumlNoteMultiLine contains=plantumlKeyword,plantumlColor,plantumlString
 
 " Class
 syntax region plantumlClass start=/\%(\%(class\|interface\|object\)\s[^{]\+\)\@<=\zs{/ end=/^\s*}/ contains=plantumlClassArrows,
@@ -77,11 +75,11 @@ syntax region plantumlClass start=/\%(\%(class\|interface\|object\)\s[^{]\+\)\@<
 \                                                                                  plantumlClassSeparator,
 \                                                                                  plantumlComment
 
-syntax match plantumlClassPublic      /^\s*+\s*\w\+/ contained
-syntax match plantumlClassPrivate     /^\s*-\s*\w\+/ contained
-syntax match plantumlClassProtected   /^\s*#\s*\w\+/ contained
-syntax match plantumlClassPackPrivate /^\s*\~\s*\w\+/ contained
-syntax match plantumlClassSeparator   /__\%(.\+__\)\?\|==\%(.\+==\)\?\|--\%(.\+--\)\?\|\.\.\%(.\+\.\.\)\?/ contained
+syntax match plantumlClassPublic      /^\s*+\s*\w\+/ contained containedin=plantumlClassOp display
+syntax match plantumlClassPrivate     /^\s*-\s*\w\+/ contained containedin=plantumlClassOp display
+syntax match plantumlClassProtected   /^\s*#\s*\w\+/ contained containedin=plantumlClassOp display
+syntax match plantumlClassPackPrivate /^\s*\~\s*\w\+/ contained containedin=plantumlClassOp display
+syntax match plantumlClassSeparator   /__\%(.\+__\)\?\|==\%(.\+==\)\?\|--\%(.\+--\)\?\|\.\.\%(.\+\.\.\)\?/ contained containedin=plantumlClass
 
 syntax cluster plantumlClassOp contains=plantumlClassPublic,
 \                                       plantumlClassPrivate,
@@ -89,7 +87,7 @@ syntax cluster plantumlClassOp contains=plantumlClassPublic,
 \                                       plantumlClassPackPrivate
 
 " Strings
-syntax match plantumlSpecialString /\\n/ contained
+syntax match plantumlSpecialString /\\n/ contained containedin=plantumlSpecialString display
 syntax region plantumlString start=/"/ skip=/\\\\\|\\"/ end=/"/ contains=plantumlSpecialString
 syntax region plantumlString start=/'/ skip=/\\\\\|\\'/ end=/'/ contains=plantumlSpecialString
 syntax match plantumlComment /'.*$/ contains=plantumlCommentTODO

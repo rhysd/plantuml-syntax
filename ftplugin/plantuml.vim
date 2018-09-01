@@ -1,3 +1,9 @@
+scriptencoding utf-8
+" Vim filetype plugin file
+" Language:     PlantUML
+" Maintainer:   Anders Thøgersen <first name at bladre dot dk>
+" License:      VIM LICENSE
+
 let s:cpo_save = &cpo
 set cpo&vim
 

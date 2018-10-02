@@ -19,7 +19,9 @@ if exists('loaded_matchit')
         \ ',\<rnote\>:\<endrnote\>' .
         \ ',\<hnote\>:\<endhnote\>' .
         \ ',\<title\>:\<endtitle\>' .
-        \ ',\<\while\>:\<endwhile\>'
+        \ ',\<\while\>:\<endwhile\>' .
+        \ ',\<\split\>:\<split again\>:\<endsplit\>' .
+        \ ',\<\fork\>:\<fork again\>:\<end fork\>'
 endif
 
 let &l:makeprg=g:plantuml_executable_script . ' ' .  fnameescape(expand('%'))
